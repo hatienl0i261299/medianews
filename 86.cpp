@@ -1,96 +1,83 @@
-#include <stdio.h>
-#include <string.h>
-typedef struct
-{
+#include<stdio.h>
+#include<math.h>
+typedef struct sanpham{
     int id;
-    char name[50];
-    float gia_nhap;
-    float gia_xuat;
-}san_pham;
-int update()
-{
-    int count=0;
-    FILE *f=fopen("san_phm1.bin","rb");
-    if(f!=NULL){
-        int c=fgetc(f);
-        while(c!=EOF){
-            count++;
-            fseek(f,sizeof(san_pham)*count,SEEK_SET);
-            c=fgetc(f);
-        }
-    }
-    fclose(f);
-    return count;
+	char ten[1000];
+	float nhap,xuat;	
+}sp;
+const int size = sizeof(sp);
+int update(){
+	FILE *f = fopen("qwe.bin","rb+");
+	fseek(f,0,SEEK_END);
+	int cnt = ftell(f) / size;
+	fclose(f);
+	return cnt;
 }
-int append(int n)
-{
-    int number=update();
-    FILE *f=fopen("san_phm1.bin","ab+");
-    for(int i=0;i<n;i++){
-        san_pham temp;
-        temp.id=++number;
-        int c;
-        while((c=getchar())!='\n');
-        gets(temp.name);
-        scanf("%f%f",&temp.gia_nhap,&temp.gia_xuat);
-        fwrite(&temp,sizeof(san_pham),1,f);
-    }
-    fclose(f);
-    return n;
+void addnew(int n){
+	FILE  *f = fopen("qwe.bin","ab+");
+	int cnt = update();
+	for(int i =1;i<=n;i++){
+		sp x;
+		x.id = cnt + i;
+		getchar();
+		gets(x.ten);
+		scanf("%f%f",&x.nhap,&x.xuat);
+		fseek(f,0,SEEK_END);
+		fwrite(&x,size,1,f);
+	}
+	fclose(f);
+	printf("%d\n",n);
 }
-void modify(int num)
-{
-    FILE *f=fopen("san_phm1.bin","rb+");
-    san_pham temp;
-    temp.id=num--;
-    int c;
-    while((c=getchar())!='\n');
-    gets(temp.name);
-    scanf("%f%f",&temp.gia_nhap,&temp.gia_xuat);
-    fseek(f,sizeof(san_pham)*num,SEEK_SET);
-    fwrite(&temp,sizeof(san_pham),1,f);
-    fclose(f);
-    printf("%d",temp.id);
+void edit(int n){
+	FILE *f = fopen("qwe.bin","rb+");
+	sp x;
+	x.id = n;
+	fseek(f,size*(n-1),SEEK_SET);
+	getchar();
+	gets(x.ten);
+	scanf("%f%f",&x.nhap,&x.xuat);
+	fseek(f,size*(n-1),SEEK_SET);
+	fwrite(&x,size,1,f);
+	fclose(f);
+	printf("%d\n",x.id);
 }
-void show()
-{
-    int n=update();
-    FILE *f=fopen("san_phm1.bin","rb");
-    san_pham temp[n];
-    for(int i=0;i<n;i++)fread(&temp[i],sizeof(san_pham),1,f);
-    fclose(f);
-    for(int i=0;i<n;i++){
-	    for(int j =i + 1;j < n;j++){
-	        if(temp[i].id<temp[j].id){
-	            san_pham temp1=temp[i];
-	            temp[i]=temp[j];
-	            temp[j]=temp1;
-	        }
-        }
-    }
-    for (int i = 0;i < n;i++) {
-    	if (  temp[i].gia_xuat  > temp[i].gia_nhap  ) {
-    		printf("%d %s %.2f %.2f\n",temp[i].id,temp[i].name,temp[i].gia_nhap,temp[i].gia_xuat);
+void show(){
+	FILE *f = fopen("qwe.bin","rb+");
+	sp x;
+	int n = update();
+	sp h[n];
+	int i =0;
+	while(fread(&x,size,1,f)){
+		h[i++] = x;
+	}
+	for(int i = 0;i<n-1;i++){
+		for(int j =0;j<n-i-1;j++){
+			if(abs(h[j].nhap - h[j].xuat) < abs(h[j+1].nhap - h[j+1].xuat)){
+				sp tmp = h[j];
+				h[j] = h[j+1];
+				h[j+1] = tmp;
+			}
 		}
 	}
+	for(int i = 0;i<n;i++){
+		printf("%d %s %0.2f %0.2f\n",h[i].id,h[i].ten,h[i].nhap,h[i].xuat);
+	}
+	fclose(f);
 }
-int main()
-{
-    int n;
-    scanf("%d",&n);
-    switch(n)
-    {
-    case 1:
-        scanf("%d",&n);
-        printf("%d",append(n));
-        break;
-    case 2:
-        scanf("%d",&n);
-        modify(n);
-        break;
-    case 3:
-        show();
-        break;
-    }
-    return 0;
+int main(){
+	int chon;
+	scanf("%d",&chon);
+	if(chon ==1){
+		int n;
+		scanf("%d",&n);
+		addnew(n);
+	}
+	else if(chon ==2){
+		int n;
+		scanf("%d",&n);
+		edit(n);
+	}
+	else if(chon == 3){
+		show();
+	}
 }

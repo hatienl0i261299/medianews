@@ -1,14 +1,14 @@
 #include <stdio.h>
 #include <string.h>
-
-typedef struct sv{
-	char name[50];
-	int nums;
-	char code[50];
+ 
+typedef struct sinhvien{
+    char name[50];
+    int nums;
+    char code[50];
 } sv;
-
+const int size = sizeof(sv);
 int count(){
-	FILE *outfile = fopen("ok.bin","rb") ;
+    FILE *outfile = fopen("data.bin","rb") ;
     int c = 0,  temp = fgetc(outfile) ;
     while (temp = fgetc(outfile)!= EOF){
         c ++ ;
@@ -17,68 +17,58 @@ int count(){
     fclose(outfile) ;
     return c;
 }
-
+ 
 void addnew(int n){
-	FILE *outfile = fopen("ok.bin","ab");
-	
-	int c = count();
-	while((getchar()) != '\n');
-	for(int i=1 ; i<=n ; i++){
-		sv s;
-		s.nums = i+c;
-		gets(s.code);
-		gets(s.name);
-		fseek(outfile,0,SEEK_END);
-		fwrite(&s,sizeof(s),1,outfile);
-	}
-	fclose(outfile);
+    FILE *outfile = fopen("data.bin","ab+");
+    
+    int c = count();
+    while((getchar()) != '\n');
+    for(int i=1 ; i<=n ; i++){
+        sv s;
+        s.nums = i+c;
+        gets(s.code);
+        gets(s.name);
+        fseek(outfile,0,SEEK_END);
+        fwrite(&s,sizeof(s),1,outfile);
+    }
+    fclose(outfile);
 }
-
+ 
 void edit(){
-	FILE *outfile = fopen("ok.bin","rb+");
-	char temp[50];
-	while((getchar()) != '\n');
-	gets(temp);
-	
-	int n = count();
-	for(int i=0 ; i<n ; i++){
-		sv s;
-		fseek(outfile,sizeof(sv)*i,SEEK_SET);
-		fread(&s,sizeof(s),1,outfile);
-		if(strcmp(temp,s.code)==0){
-			sv ss;
-			ss.nums = i+1;
-			gets(ss.code);
-			gets(ss.name);
-			fseek(outfile,sizeof(sv)*i,SEEK_SET);
-			fwrite(&ss,sizeof(ss),1,outfile);
-			puts(ss.code);
+    FILE *outfile = fopen("data.bin","rb+");
+    while(getchar() != '\n');
+    char c[1000];
+    gets(c);
+    sv s;
+    while(fread(&s,size,1,outfile)){
+		if(strcmp(c,s.code)==0){
+			gets(s.code);
+			gets(s.name);
+			fseek(outfile,-size,SEEK_CUR);
+			fwrite(&s,size,1,outfile);
 			break;
-		}	
+		}
 	}
+	fclose(outfile);
+	printf("%s\n",s.code);
 }
-
+ 
 void display(){
-	FILE *outfile = fopen("ok.bin","rb");
-	int n = count();
-	while((getchar()) != '\n');
-	char temp[50];
-	gets(temp);
-	
-	for(int i=0 ; i<n ; i++){
-		sv s;
-		fseek(outfile,sizeof(sv)*i,SEEK_SET);
-		fread(&s,sizeof(s),1,outfile);
-		if(strncmp(s.code,temp,7)!=0)
-			continue;
-		printf("%d %s %s",s.nums,s.name,s.code);
-		printf("\n");
+    FILE *outfile = fopen("data.bin","rb+");
+    while(getchar() != '\n');
+    char c[1000];
+    gets(c);
+    sv s;
+    while(fread(&s,size,1,outfile)){
+    	if(strstr(s.code,c) != NULL){
+    		printf("%d %s %s\n",s.nums,s.name,s.code);
+		}
 	}
 	fclose(outfile);
 }
-
+ 
 int main(){
-	int n ;
+    int n ;
     scanf("%d", &n);
     switch (n) {
     case 1 :
@@ -87,7 +77,7 @@ int main(){
         printf("%d",n) ;
         break ;
     case 2 :
-        edit() ;
+        edit();
         break ;
     case 3 :
         display() ;
