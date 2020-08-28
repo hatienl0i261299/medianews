@@ -1,31 +1,35 @@
-#include<iostream>
+#include <bits/stdc++.h>
+#include <stdio.h>
+#include <iostream>
+#define mx 100
 
 using namespace std;
 
 int main() {
-	int m, n;
-	cin >> m;
-	n = m;
-	int a[m][n];
-	int dong = m, cot = n, k = 1, p = 0, i, j;
-	while(k <= m*n){
-		for(i = p; i < cot; i++) 
-			a[p][i] = k++;
-		for(i = p+1; i < dong; i++) 
-			a[i][cot-1] = k++;
-		if ( p != dong-1){
-			for(i = cot-2; i >=p; i--) 
-				a[dong-1][i] = k++;
-		}	
-		if(p!=cot-1){
-			for(i = dong-2; i > p; i--) 
-				a[i][p] = k++;
-		}	
-		p++;dong --; cot --;
+	int n;
+	cin >> n;
+	int a[mx][mx],hang = n,cot = n,value = 1,k = 1;
+	while (k <= (n/2 + 1)) {
+		for (int i = k;i <= cot;i++) {
+			a[k][i] = value++;
+		}
+		for (int i = k+1;i <= hang;i++) {
+			a[i][cot] = value++;
+		}
+		for (int i = cot - 1;i >= k;i--) {
+			a[hang][i] = value++;
+		}
+		for (int i = hang - 1;i >= k+1;i--) {
+			a[i][k] = value++;
+		}
+		k++;
+		hang--;
+		cot--;
 	}
-	for(i = 0; i < m; i++){
-		for(j = 0; j < n; j++)
+	for (int i = 1;i <=n;i++) {
+		for (int j = 1;j <= n;j++) {
 			cout << a[i][j] << " ";
+		}
 		cout << endl;
 	}
 }

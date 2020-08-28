@@ -1,40 +1,35 @@
+#include <bits/stdc++.h>
 #include <stdio.h>
-#include <conio.h>
-#include <stdlib.h>
-#include <math.h>
 #include <iostream>
 #define mx 100
-#define null NULL
-#define ll long long
+
 using namespace std;
 
 int main() {
-	int m,n;
+	int n;
 	cin >> n;
-	int a[mx][mx];
-	m = n;
-	int d = 0, i, gt = m*n;
-    int hang = m - 1, cot = n - 1;
-    while(gt > 0){        
-        for(i = d; i <= cot; i++) {          
-            a[d][i] = gt--;          
-        }       
-        for(i = d+1; i <= hang; i++){            
-            a[i][cot] = gt--; 
-        }       
-        for(i = cot-1; i>=d && gt <= m * n; i--){         
-            a[hang][i]=gt--; 
-        }       
-        for(i = hang-1; i>d && gt <= m * n; i--){         
-            a[i][d] = gt--;
-        }       
-        d++; 
-		hang--; 
-		cot--;      
-    }
-	for(int i = 0; i < m; i++){
-		for(int j = 0; j < n; j++)
+	int a[mx][mx],hang = n,cot = n,value = n*n,k = 1;
+	while (k <= (n/2 + 1)) {
+		for (int i = k;i <= cot;i++) {
+			a[k][i] = value--;
+		}
+		for (int i = k+1;i <= hang;i++) {
+			a[i][cot] = value--;
+		}
+		for (int i = cot - 1;i >= k;i--) {
+			a[hang][i] = value--;
+		}
+		for (int i = hang - 1;i >= k+1;i--) {
+			a[i][k] = value--;
+		}
+		k++;
+		hang--;
+		cot--;
+	}
+	for (int i = 1;i <=n;i++) {
+		for (int j = 1;j <= n;j++) {
 			cout << a[i][j] << " ";
+		}
 		cout << endl;
 	}
 }
