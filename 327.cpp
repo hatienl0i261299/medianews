@@ -3,45 +3,43 @@
 using namespace std;
 
 int main() {
+	int a[mx][mx],n;
+	cin >> n;
+	int hang = n,cot = n,value = 0,k = 1;
 	
-	int size,matrix[mx][mx],n;
-	vector<int> fibo;
-	cin >> size;
-	n = size * size;
-	int first = 0,second = 1;
-	while (n--)	 {
+	vector <int> fibo;
+	int first = 0,second = 1,tmp = n*n;
+	while (tmp--) {
 		fibo.push_back(first);
 		int num = first + second;
 		first = second;
 		second = num;
 	}
 	
-	int tmp = 1,row = size,col = size, pos = 0;
-	while (tmp <= (size / 2 + 1)) {
-		for (int i = tmp;i <= col;i++) {
-			matrix[tmp][i] = fibo[pos++];
+	while (k <= (n/2 + 1)) {
+		for (int i = k;i <= cot;i++) {
+			a[k][i] = fibo[value++];
 		}
-		for (int i = tmp+1;i <= row;i++) {
-			matrix[i][col] = fibo[pos++];
+		for (int i = k+1;i <= hang;i++) {
+			a[i][cot] = fibo[value++];
 		}
-		
-		for (int i = col-1;i >= tmp;i--) {
-			matrix[row][i] = fibo[pos++];
+		for (int i = cot-1;i >= k;i--) {
+			a[hang][i] = fibo[value++];
 		}
-		
-		for (int i = row-1;i >= tmp+1;i--) {
-			matrix[i][tmp] = fibo[pos++];
+		for (int i = hang-1;i >= k+1;i--) {
+			a[i][k] = fibo[value++];
 		}
-		tmp++;
-		row--;
-		col--;
+		k++;
+		hang--;
+		cot--;
 	}
 	
-	for (int row = 1;row <= size;row++) {
-		for (int col = 1;col <= size;col++) {
-			cout << matrix[row][col] << " ";
+	for (int i = 1;i <= n;i++) {
+		for (int j = 1;j <= n;j++) {
+			cout << a[i][j] << " ";
 		}
-		cout << "\n";
+		cout << endl;
 	}
 	
+	return 0;
 }
