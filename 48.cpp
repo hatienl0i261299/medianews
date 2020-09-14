@@ -1,53 +1,37 @@
-#include <stdio.h>
-#include <conio.h>
-#include <stdlib.h>
-#include <math.h>
-#include <iostream>
+#include <bits/stdc++.h>
 #include <string.h>
 #define mx 100
-#define null NULL
-#define ll long long
 using namespace std;
 
-bool check(int tm,char *a,char *p) {
-	for (int i = 0;i < strlen(p);i++) {
-		if (p[i] != a[tm + i]) {
-			return true;
+int main() {
+	char s[100],a[mx][mx];
+	fgets(s,100,stdin);
+	char *token = strtok(s, " ");
+	int pos = 0;
+	while (token != NULL) {
+		strcpy(a[pos++],token);
+		token = strtok(NULL," ");
+	}
+	
+	for (int i = 0;i < pos;i++) {
+		for (int j = 0;j < strlen(a[i]);j++) {
+			if ( (i == pos-1 or j == 0) and a[i][j] >= 'a' and a[i][j] <= 'z' ) {
+				a[i][j] -= 32;
+			}
+			if (i != pos - 1 and j != 0 and a[i][j] >= 'A' and a[i][j] <= 'Z') {
+				a[i][j] += 32;
+			}
 		}
 	}
-	return false;
-}
-
-int main()
-{
-    char a[mx];
-    gets(a);
-    strlwr(a);
-    int tm;
-    for (int i = 0;i < strlen(a);i++) {
-    	if (a[i] == ' ') {
-    		tm = i+1;
+	
+	for (int i = 0;i < pos-1;i++) {
+		cout << a[i];
+		if (i != pos - 2) {
+			cout << " ";
 		}
 	}
-    char *p = strtok(a, " ");
-    bool kt=true;
-    while(p!=null)
-    {
-        if (check(tm,a,p)) {
-	    	if(p[0] >= 'a' and p[0] <= 'z') p[0] -= 32;
-	        if(kt==true) kt=false;
-	        else printf(" ");
-	        	for (int i = 1;i < strlen(p);i++) {
-					if (p[i] >= 'A' and p[i] <= 'Z') {
-						p[i] += 32;
-					}
-				}
-			cout << p;
-		} else  cout << ", " << strupr(p);
-		p = strtok(null," ");
-    }
-   
-    
-    return 0;
+	
+	cout << ", " << a[pos-1];
+	
+	return 0;
 }
-

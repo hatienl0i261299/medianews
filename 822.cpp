@@ -1,36 +1,27 @@
-#include <stdio.h>
-#include <conio.h>
-#include <stdlib.h>
-#include <math.h>
-#include <iostream>
+#include <bits/stdc++.h>
 #include <string.h>
 #define mx 100
 #define null NULL
-#define ll long long
 using namespace std;
 
-void solve() {
-	char chr[mx];
-	fflush(stdin);gets(chr);
-	strlwr(chr);
-	ll tm;
-	for (int i = 0;i < strlen(chr);i++) {
-		if (i == 0) {
-			cout << chr[0];
-		} else {
-			if (chr[i-1] == ' ' and chr[i] != ' ') {
-				cout << chr[i];
-				tm = i+1;
-			}
-		}
+int main() {
+	char s[mx],a[mx][mx];
+	fgets(s,mx,stdin);
+	strlwr(s);
+	char *token = strtok(s," ");
+	int pos = 0;
+	while (token != null) {
+		strcpy(a[pos++],token);
+		token = strtok(null," ");
 	}
-	for (int i = tm;i < strlen(chr);i++) {
-		cout << chr[i];
+	
+	for (int i = 0;i < pos-1;i++) {
+		cout << a[i][0];
+	}
+	
+	for (int i = 0;i < strlen(a[pos-1])-1;i++) {
+		cout << a[pos-1][i];
 	}
 	cout << "@ptit.edu.vn";
-}
-
-int main() {
-	solve();
 	return 0;
 }

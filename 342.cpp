@@ -1,39 +1,37 @@
 #include <bits/stdc++.h>
+#include <string.h>
 #define mx 100
 #define null NULL
-#define ll long long
 using namespace std;
 
+bool check(char *a,char *b) {
+	int l_a = strlen(a);
+	int l_b = strlen(b);
+	if (l_a > l_b) {
+		int tm = l_a;
+		l_a = l_b;
+		l_b = tm;
+	}
+	for (int i = 0;i < l_a;i++) {
+		if (a[i] !='\n' and a[i] != b[i]) return false;
+	}
+	return true;
+}
+
 int main() {
-	string s1,s2;
-	getline(cin,s1);
-	getline(cin,s2);
-	for (int i = 0;i < s1.length();i++) {
-		if (s1[i] == s2[0]) {
-			int pos = i;
-			bool check = true;
-			for (int j = 0;j < s2.length();j++) {
-				if (s1[pos++] != s2[j]) {
-					check = false;
-					break;
-				}
-			}
-			if (check) {
-				s1.erase(i,s2.length());
-			}
+	char a[mx],b[mx],ar[mx][mx];
+	fgets(a,mx,stdin);
+	fgets(b,mx,stdin);
+	char *token = strtok(a," ");
+	int pos = 0;
+	while (token != null) {
+		strcpy(ar[pos++],token);
+		token = strtok(null," ");
+	}
+	for (int i = 0;i < pos;i++) {
+		if (!check(ar[i],b)) {
+			cout << ar[i] << " ";
 		}
 	}
-	
-	while (s1[0] == ' ') {
-		s1.erase(0,1);
-	}
-	
-	for (int i = 1;i < s1.length();i++) {
-		if (s1[i] == ' ' and s1[i+1] == ' '){
-			s1.erase(i--,1);
-		}
-	}
-	cout << s1;
-	
 	return 0;
 }
